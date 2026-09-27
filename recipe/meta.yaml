@@ -11,8 +11,14 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  skip: true   # [win]
-  number: 0
+  number: 1
+  noarch: generic
+  script:
+    - >-
+      perl Makefile.PL INSTALLDIRS=vendor NO_PERLLOCAL=1 NO_PACKLIST=1 MAKE=make
+      && make
+      && make test
+      && make install VERBINST=1
   run_exports:
     weak:
       - {{ name }} ={{ version }}
@@ -28,6 +34,10 @@ requirements:
 test:
   imports:
     - inc::latest
+  commands:
+    - prove
+  source_files:
+    - t
 
 about:
   home: https://github.com/Perl-Toolchain-Gang/inc-latest
